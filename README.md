@@ -1,54 +1,114 @@
-# Claude Commit Plugin (JetBrains)
+# Claude Commit Message — JetBrains Plugin
 
-IntelliJ plugin to generate Git commit messages with Claude.
+Generate meaningful, conventional Git commit messages straight from your IDE — powered by [Claude](https://claude.ai).
+
+> **Screenshots coming soon**
+
+---
 
 ## Features
 
-- Direct `Generate Claude Commit Message` button in the commit message toolbar (depends on IDE version).
-- Action available in VCS/commit menus.
-- Dedicated page in `Settings > Tools > Claude Commit` with mode selection: `AUTO`, `LOCAL`, `API`.
-- Reads changes from Git diff (staged first, then selected working-tree diff fallback).
-- Two generation modes:
-  - local command mode (for example: `claude -p "{prompt}"`)
-  - Anthropic API mode with key stored in Password Safe
+- **One-click generation** from the commit dialog toolbar or the VCS menu
+- **Conventional Commits** format by default (`type(scope): summary`)
+- **Three generation modes** — no internet? No problem
+  - `AUTO` — tries local Claude CLI first, falls back to the Anthropic API
+  - `LOCAL` — runs any local command (e.g. `claude -p "{prompt}"`)
+  - `API` — calls the Anthropic API directly with your key
+- **Smart diff scoping** — uses staged changes, selected files, or the full working-tree diff
+- **Customizable prompt** — edit the system prompt and use `{diff}` as a placeholder
+- **Live model list** — refresh available Claude models directly from the settings panel
+- **Secure key storage** — API key stored in the IDE's Password Safe (never in plain text)
+- **i18n** — English and French supported
+
+---
 
 ## Requirements
 
-- JDK 17+
-- IntelliJ IDEA 2024.2+
-- Gradle (or wrapper)
+| Requirement | Version |
+|---|---|
+| JetBrains IDE | IntelliJ IDEA 2024.2+ (and other JetBrains IDEs) |
+| JDK | 17+ |
 
-## Configuration (IntelliJ and other JetBrains IDEs)
+---
 
-- Open `Settings > Tools > Claude Commit`.
-- Choose `Generation mode`:
-  - `AUTO`: try local Claude (Claude Code/CLI) then API.
-  - `LOCAL`: force local command.
-  - `API`: force Anthropic API.
-- Choose a `Claude model` from the latest-model list.
-- Use `Refresh models` to fetch the newest list from the Anthropic API.
-- Edit `Custom commit prompt` with the `{diff}` placeholder.
-- `Local command` examples:
-  - Windows (`cmd.exe`): `claude -p "{prompt}"`
-  - macOS/Linux: `claude -p '{prompt}'`
+## Installation
 
-## Quick Development
+Install from the JetBrains Marketplace *(coming soon)*, or build from source:
 
 ```bash
-gradle test
-gradle runIde
+./gradlew runIde
 ```
 
-On Windows `cmd.exe`:
+---
 
-```bat
-gradle test
-gradle runIde
+## Configuration
+
+Open **Settings → Tools → Claude Commit**.
+
+| Setting | Description |
+|---|---|
+| **API Key** | Your Anthropic API key (stored securely in Password Safe) |
+| **Model** | Select a Claude model from the list |
+| **Refresh models** | Fetches the latest model list from the Anthropic API |
+| **Generation mode** | `AUTO`, `LOCAL`, or `API` |
+| **Local command** | Command template with `{prompt}` placeholder |
+| **Max diff size** | Maximum number of characters sent to the model (1 000 – 100 000) |
+| **Custom prompt** | System prompt template — use `{diff}` to inject the Git diff |
+
+### Local command examples
+
+```bash
+# macOS / Linux
+claude -p '{prompt}'
+
+# Windows (cmd.exe)
+claude -p "{prompt}"
+
+# Any other CLI tool
+my-llm-tool --prompt "{prompt}"
 ```
 
-## Notes
+### AUTO mode behavior
 
-- The commit-toolbar button depends on available IntelliJ action groups for your IDE version.
-- If local mode fails, the plugin falls back to Anthropic API when configured.
+```
+Local Claude CLI available?
+  ├── Yes → generate locally (fast, no API cost)
+  └── No  → fall back to Anthropic API
+```
 
+---
 
+## Default prompt template
+
+```
+You are an assistant that writes professional Git commit messages.
+
+Constraints:
+- Reply only with the commit message.
+- Preferred conventional format: type(scope): summary
+- One title line <= 72 characters.
+- Optional: one blank line then 2-4 short bullets.
+- Base your response strictly on the provided diff.
+- Do not invent changes that are not present.
+
+Git Diff:
+{diff}
+```
+
+---
+
+## Development
+
+```bash
+# Run tests
+./gradlew test
+
+# Launch a sandboxed IDE instance
+./gradlew runIde
+```
+
+---
+
+## License
+
+MIT

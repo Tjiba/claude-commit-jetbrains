@@ -6,7 +6,7 @@ import com.intellij.ide.passwordSafe.PasswordSafe
 
 object ClaudeCommitSecrets {
     private const val SERVICE_NAME = "ClaudeCommitPlugin.AnthropicApiKey"
-    private val attributes = CredentialAttributes(SERVICE_NAME)
+    private val attributes = CredentialAttributes(SERVICE_NAME, "anthropic")
 
     fun getApiKey(): String? = PasswordSafe.instance.get(attributes)?.getPasswordAsString()?.takeIf { it.isNotBlank() }
 
