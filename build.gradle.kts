@@ -19,13 +19,14 @@ intellij {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
+    // Kotlin stdlib is automatically managed by the IntelliJ Platform
     testImplementation(kotlin("test"))
 }
 
 tasks {
     patchPluginXml {
         sinceBuild.set("241")
-        untilBuild.set("241.*")
+        untilBuild.set("")
     }
 
     withType<JavaCompile> {
