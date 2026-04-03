@@ -1,16 +1,16 @@
 <idea-plugin>
     <id>fr.tjiba.claude.commit</id>
-    <name>%plugin.name</name>
+    <name>Claude Commit Message</name>
     <vendor email="tjiba@tjiba.fr">Tjiba</vendor>
 
-    <description>%plugin.description</description>
+    <description>Generates concise, context-aware Git commit messages from your selected changes using Anthropic's Claude AI. Supports local Claude and API modes with customizable prompts.</description>
 
     <depends>com.intellij.modules.platform</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
                 id="claude.commit.settings"
-                displayName="%settings.display.name"
+                displayName="Claude Commit"
                 parentId="tools"
                 instance="fr.tjiba.claudecommit.settings.ClaudeCommitConfigurable"/>
         <notificationGroup id="Claude Commit Notifications" displayType="BALLOON" isLogByDefault="true"/>
