@@ -1,6 +1,6 @@
 <h1 align="center">Claude Commit Message — JetBrains Plugin</h1>
 
-<p align="center">Generate meaningful, conventional Git commit messages straight from your IDE — powered by <a href="https://claude.ai">Claude</a>.</p>
+<p align="center">Generate meaningful, conventional Git commit messages straight from your IDE.</p>
 
 <p align="center">
   <img width="458" height="237" alt="image" src="https://github.com/user-attachments/assets/9d06f45e-78fe-4220-aaef-be5fd2d14c74" />
