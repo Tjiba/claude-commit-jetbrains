@@ -1,0 +1,23 @@
+# IntelliJ
+.idea/
+*.iml
+out/
+
+# Gradle
+.gradle/
+build/
+
+# Local tooling/bootstrap artifacts
+.tools/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# Environment files
+.env
+.env.*
+
