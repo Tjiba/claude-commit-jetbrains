@@ -1,13 +1,14 @@
-# Claude Commit Message — JetBrains Plugin
+<h1 align="center">Claude Commit Message — JetBrains Plugin</h1>
 
-Generate meaningful, conventional Git commit messages straight from your IDE — powered by [Claude](https://claude.ai).
+<p align="center">Generate meaningful, conventional Git commit messages straight from your IDE — powered by <a href="https://claude.ai">Claude</a>.</p>
 
-<img width="458" height="237" alt="image" src="https://github.com/user-attachments/assets/9d06f45e-78fe-4220-aaef-be5fd2d14c74" />
-
+<p align="center">
+  <img width="458" height="237" alt="image" src="https://github.com/user-attachments/assets/9d06f45e-78fe-4220-aaef-be5fd2d14c74" />
+</p>
 
 ---
 
-## Features
+<h2 align="center">Features</h2>
 
 - **One-click generation** from the commit dialog toolbar or the VCS menu
 - **Conventional Commits** format by default (`type(scope): summary`)
@@ -21,12 +22,13 @@ Generate meaningful, conventional Git commit messages straight from your IDE —
 - **Secure key storage** — API key stored in the IDE's Password Safe (never in plain text)
 - **i18n** — English and French supported
 
-<img width="1065" height="777" alt="image" src="https://github.com/user-attachments/assets/e174bf3e-0ae4-463b-b7a9-aeeb71ac0927" />
-
+<p align="center">
+  <img width="1065" height="777" alt="image" src="https://github.com/user-attachments/assets/e174bf3e-0ae4-463b-b7a9-aeeb71ac0927" />
+</p>
 
 ---
 
-## Requirements
+<h2 align="center">Requirements</h2>
 
 | Requirement | Version |
 |---|---|
@@ -35,9 +37,9 @@ Generate meaningful, conventional Git commit messages straight from your IDE —
 
 ---
 
-## Installation
+<h2 align="center">Installation</h2>
 
-Install from the JetBrains Marketplace *(coming soon)*, or build from source:
+<p align="center">Install from the JetBrains Marketplace <em>(coming soon)</em>, or build from source:</p>
 
 ```bash
 ./gradlew runIde
@@ -45,9 +47,9 @@ Install from the JetBrains Marketplace *(coming soon)*, or build from source:
 
 ---
 
-## Configuration
+<h2 align="center">Configuration</h2>
 
-Open **Settings → Tools → Claude Commit**.
+<p align="center">Open <strong>Settings → Tools → Claude Commit</strong>.</p>
 
 | Setting | Description |
 |---|---|
@@ -59,7 +61,7 @@ Open **Settings → Tools → Claude Commit**.
 | **Max diff size** | Maximum number of characters sent to the model (1 000 – 100 000) |
 | **Custom prompt** | System prompt template — use `{diff}` to inject the Git diff |
 
-### Local command examples
+<h3 align="center">Local command examples</h3>
 
 ```bash
 # macOS / Linux
@@ -72,7 +74,7 @@ claude -p "{prompt}"
 my-llm-tool --prompt "{prompt}"
 ```
 
-### AUTO mode behavior
+<h3 align="center">AUTO mode behavior</h3>
 
 ```
 Local Claude CLI available?
@@ -82,7 +84,7 @@ Local Claude CLI available?
 
 ---
 
-## Default prompt template
+<h2 align="center">Default prompt template</h2>
 
 ```
 You are an assistant that writes professional Git commit messages.
@@ -101,7 +103,7 @@ Git Diff:
 
 ---
 
-## Development
+<h2 align="center">Development</h2>
 
 ```bash
 # Run tests
@@ -113,6 +115,6 @@ Git Diff:
 
 ---
 
-## License
+<h2 align="center">License</h2>
 
-MIT
+<p align="center">MIT</p>
