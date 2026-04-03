@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "fr.tjiba"
-version = "0.1.0"
+version = "0.1.1"
 
 repositories {
     mavenCentral()
@@ -19,14 +19,13 @@ intellij {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
-    // Kotlin stdlib is automatically managed by the IntelliJ Platform
     testImplementation(kotlin("test"))
 }
 
 tasks {
     patchPluginXml {
         sinceBuild.set("241")
-        untilBuild.set("")
+        untilBuild.set("241.*")
     }
 
     withType<JavaCompile> {

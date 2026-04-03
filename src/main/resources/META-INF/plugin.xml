@@ -1,7 +1,7 @@
 <idea-plugin>
     <id>fr.tjiba.claude.commit</id>
     <name>Claude Commit Message</name>
-    <vendor email="tjiba@tjiba.fr">Tjiba</vendor>
+    <vendor email="contact@tjiba.fr">Tjiba</vendor>
 
     <description>Generates concise, context-aware Git commit messages from your selected changes using Anthropic's Claude AI. Supports local Claude and API modes with customizable prompts.</description>
 
