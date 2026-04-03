@@ -2,7 +2,8 @@
 
 Generate meaningful, conventional Git commit messages straight from your IDE — powered by [Claude](https://claude.ai).
 
-> **Screenshots coming soon**
+<img width="458" height="237" alt="image" src="https://github.com/user-attachments/assets/9d06f45e-78fe-4220-aaef-be5fd2d14c74" />
+
 
 ---
 
@@ -19,6 +20,9 @@ Generate meaningful, conventional Git commit messages straight from your IDE —
 - **Live model list** — refresh available Claude models directly from the settings panel
 - **Secure key storage** — API key stored in the IDE's Password Safe (never in plain text)
 - **i18n** — English and French supported
+
+<img width="1065" height="777" alt="image" src="https://github.com/user-attachments/assets/e174bf3e-0ae4-463b-b7a9-aeeb71ac0927" />
+
 
 ---
 
