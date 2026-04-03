@@ -6,7 +6,7 @@ plugins {
 }
 
 group = "fr.tjiba"
-version = "0.1.1"
+version = "0.1.2"
 
 repositories {
     mavenCentral()
@@ -25,7 +25,7 @@ dependencies {
 tasks {
     patchPluginXml {
         sinceBuild.set("241")
-        untilBuild.set("241.*")
+        untilBuild.set("")
     }
 
     withType<JavaCompile> {
