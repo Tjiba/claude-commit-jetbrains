@@ -2,7 +2,7 @@ plugins {
     id("java")
     kotlin("jvm") version "1.9.25"
     kotlin("plugin.serialization") version "1.9.25"
-    id("org.jetbrains.intellij") version "1.17.4"
+    id("org.jetbrains.intellij.platform") version "2.0.1"
 }
 
 group = "fr.tjiba"
@@ -10,14 +10,16 @@ version = "0.1.8"
 
 repositories {
     mavenCentral()
-}
-
-intellij {
-    version.set("2024.3")
-    type.set("IC")
+    intellijPlatform {
+        defaultRepositories()
+    }
 }
 
 dependencies {
+    intellijPlatform {
+        create("IC", "2024.3")
+        instrumentationTools()
+    }
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3")
     testImplementation(kotlin("test"))
 }
@@ -32,13 +34,23 @@ tasks {
         untilBuild.set("")
     }
 
+    signPlugin {
+        certificateChain.set("")
+        privateKey.set("")
+        password.set("")
+    }
+
+    publishPlugin {
+        token.set("")
+    }
+
     withType<JavaCompile> {
-        sourceCompatibility = "17"
-        targetCompatibility = "17"
+        sourceCompatibility = "21"
+        targetCompatibility = "21"
     }
 
     withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
-        kotlinOptions.jvmTarget = "17"
+        kotlinOptions.jvmTarget = "21"
     }
 
     test {
