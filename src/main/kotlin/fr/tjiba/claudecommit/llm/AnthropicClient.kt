@@ -46,7 +46,7 @@ class AnthropicClient(
                     else -> {
                         val body = try {
                             response.body().take(400)
-                        } catch (e: Exception) {
+                        } catch (_: Exception) {
                             "Unable to parse error response"
                         }
                         "Anthropic API error ${response.statusCode()}: $body"

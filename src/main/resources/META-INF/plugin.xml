@@ -38,8 +38,7 @@
         <action id="ClaudeCommit.GenerateMessage"
                 class="fr.tjiba.claudecommit.actions.GenerateCommitMessageAction"
                 icon="/icons/claudeCommit.svg">
-            <add-to-group group-id="Vcs.MessageActionGroup" anchor="last"/>
-            <add-to-group group-id="VcsGroup" anchor="last"/>
+            <add-to-group group-id="Vcs.Push.Actions" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>
