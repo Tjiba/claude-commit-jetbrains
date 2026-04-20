@@ -4,6 +4,8 @@
     <vendor email="contact@tjiba.fr">Tjiba</vendor>
     <version>0.1.8</version>
 
+    <resourceBundle>claudeCommitBundle</resourceBundle>
+
     <description>Generates concise, context-aware Git commit messages from your selected changes using Anthropic's Claude AI. Supports local Claude and API modes with customizable prompts.</description>
 
     <change-notes><![CDATA[
@@ -28,17 +30,19 @@
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
                 id="claude.commit.settings"
-                displayName="Claude Commit"
+                displayName="settings.display.name"
                 parentId="tools"
                 instance="fr.tjiba.claudecommit.settings.ClaudeCommitConfigurable"/>
-        <notificationGroup id="Claude Commit Notifications" displayType="BALLOON" isLogByDefault="true"/>
+        <notificationGroup id="Claude Commit Notifications" displayName="notification.group.claude.commit" displayType="BALLOON" isLogByDefault="true"/>
     </extensions>
 
     <actions resource-bundle="claudeCommitBundle">
         <action id="ClaudeCommit.GenerateMessage"
                 class="fr.tjiba.claudecommit.actions.GenerateCommitMessageAction"
-                icon="/icons/claudeCommit.svg">
-            <add-to-group group-id="Vcs.Push.Actions" anchor="last"/>
+                icon="/icons/claudeCommit.svg"
+                text="action.ClaudeCommit.GenerateMessage.text"
+                description="action.ClaudeCommit.GenerateMessage.description">
+            <add-to-group group-id="VcsGroup" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>
