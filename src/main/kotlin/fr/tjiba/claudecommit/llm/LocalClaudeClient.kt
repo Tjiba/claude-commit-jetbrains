@@ -12,43 +12,11 @@ class LocalClaudeClient {
             val output = CapturingProcessHandler(commandLine).runProcess(Duration.ofSeconds(45).toMillis().toInt())
 
             if (output.exitCode != 0) {
-                val stderr = output.stderr.takeIf { it.isNotBlank() } ?: ClaudeCommitBundle.message("error.local.execFailed")
-                val errorMsg = when {
-                    stderr.contains("no tokens available", ignoreCase = true) ||
-                    stderr.contains("insufficient quota", ignoreCase = true) ||
-                    stderr.contains("credit limit", ignoreCase = true) ||
-                    stderr.contains("usage_error", ignoreCase = true) ||
-                    stderr.contains("no stdin data received", ignoreCase = true) -> {
-                        ClaudeCommitBundle.message("error.anthropic.insufficientQuota")
-                    }
-                    else -> stderr
-                }
-                error(errorMsg)
+                error(output.stderr.takeIf { it.isNotBlank() } ?: ClaudeCommitBundle.message("error.local.execFailed"))
             }
 
             val message = output.stdout.trim()
-
-            // Check if output contains token/quota errors (in stdout or stderr)
-            if (message.contains("no stdin data received", ignoreCase = true) ||
-                message.contains("no tokens available", ignoreCase = true) ||
-                message.contains("insufficient quota", ignoreCase = true)) {
-                error(ClaudeCommitBundle.message("error.anthropic.insufficientQuota"))
-            }
-
-            if (message.isBlank()) {
-                val stderr = output.stderr.takeIf { it.isNotBlank() } ?: ""
-                val errorMsg = when {
-                    stderr.contains("no tokens available", ignoreCase = true) ||
-                    stderr.contains("insufficient quota", ignoreCase = true) ||
-                    stderr.contains("credit limit", ignoreCase = true) ||
-                    stderr.contains("usage_error", ignoreCase = true) ||
-                    stderr.contains("no stdin data received", ignoreCase = true) -> {
-                        ClaudeCommitBundle.message("error.anthropic.insufficientQuota")
-                    }
-                    else -> ClaudeCommitBundle.message("error.local.emptyOutput")
-                }
-                error(errorMsg)
-            }
+            require(message.isNotBlank()) { ClaudeCommitBundle.message("error.local.emptyOutput") }
             message
         }
     }

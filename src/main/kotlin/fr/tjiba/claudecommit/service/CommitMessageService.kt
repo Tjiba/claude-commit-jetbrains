@@ -52,29 +52,13 @@ class CommitMessageService(private val project: Project) {
             IllegalStateException(ClaudeCommitBundle.message("error.apiKey.missing"))
         )
         val selectedModel = settings.getEffectiveModel()
-        val effortLevel = settings.getEffortLevel().name.lowercase()
-        val primary = AnthropicClient(apiKey = apiKey, model = selectedModel, effortLevel = effortLevel).generateCommitMessage(prompt)
+        val primary = AnthropicClient(apiKey = apiKey, model = selectedModel).generateCommitMessage(prompt)
         if (primary.isSuccess) return primary
-
-        // Don't retry on API errors (401, 402, 429) - these are account/quota/rate limit issues
-        val errorMessage = primary.exceptionOrNull()?.message ?: ""
-        if (isApiError(errorMessage)) return primary
 
         val fallbackModel = ClaudeCommitSettingsState.defaultModelId()
         if (fallbackModel == selectedModel) return primary
-        return AnthropicClient(apiKey = apiKey, model = fallbackModel, effortLevel = effortLevel).generateCommitMessage(prompt)
+        return AnthropicClient(apiKey = apiKey, model = fallbackModel).generateCommitMessage(prompt)
     }
-
-    private fun isApiError(errorMessage: String): Boolean {
-         return errorMessage.contains("Invalid API key") ||
-                errorMessage.contains("Invalid API") ||
-                errorMessage.contains("No tokens available") ||
-                errorMessage.contains("insufficient quota") ||
-                errorMessage.contains("API rate limit exceeded") ||
-                errorMessage.contains("Anthropic API error 402") ||
-                errorMessage.contains("Anthropic API error 401") ||
-                errorMessage.contains("Anthropic API error 429")
-     }
 
     private fun isClaudePluginLikelyInstalled(): Boolean {
         val knownIds = listOf("com.anthropic.claudecode", "com.claude.code")
