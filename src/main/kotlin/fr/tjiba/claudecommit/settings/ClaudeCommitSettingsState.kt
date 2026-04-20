@@ -22,9 +22,17 @@ class ClaudeCommitSettingsState : PersistentStateComponent<ClaudeCommitSettingsS
         API
     }
 
+    enum class EffortLevel {
+        MINIMAL,    // Très rapide, minimal de tokens
+        LOW,        // Rapide, peu de tokens
+        MEDIUM,     // Équilibré (par défaut)
+        HIGH,       // Approfondi, plus de tokens
+        MAXIMUM     // Maximum d'effort, maximum de tokens
+    }
+
     data class State(
-        var model: String = "claude-sonnet-4-6",
-        var modelPresetId: String = "claude-sonnet-4-6",
+        var model: String = "claude-opus-4-7-20250219",
+        var modelPresetId: String = "claude-opus-4-7-20250219",
         var cachedModelIds: MutableList<String> = mutableListOf(),
         var lastModelsSyncEpochMs: Long = 0,
         var generationMode: String = GenerationMode.AUTO.name,
@@ -32,6 +40,7 @@ class ClaudeCommitSettingsState : PersistentStateComponent<ClaudeCommitSettingsS
         var localCommandTemplate: String = "claude -p \"{prompt}\"",
         var maxDiffChars: Int = 12000,
         var promptTemplate: String = DEFAULT_PROMPT_TEMPLATE,
+        var effortLevel: String = EffortLevel.MEDIUM.name,
     ) {
         fun getGenerationMode(): GenerationMode {
             return GenerationMode.entries.firstOrNull { it.name == generationMode }
@@ -41,6 +50,15 @@ class ClaudeCommitSettingsState : PersistentStateComponent<ClaudeCommitSettingsS
         fun setGenerationMode(mode: GenerationMode) {
             generationMode = mode.name
             useLocalClaude = mode != GenerationMode.API
+        }
+
+        fun getEffortLevel(): EffortLevel {
+            return EffortLevel.entries.firstOrNull { it.name == effortLevel }
+                ?: EffortLevel.MEDIUM
+        }
+
+        fun setEffortLevel(level: EffortLevel) {
+            effortLevel = level.name
         }
 
         fun getEffectiveModel(): String {
@@ -86,14 +104,21 @@ Git Diff:
 """
 
         private val PRESET_MODELS = listOf(
-            ModelPreset("claude-sonnet-4-6", "claude-sonnet-4-6"),
-            ModelPreset("claude-opus-4-6", "claude-opus-4-6"),
-            ModelPreset("claude-opus-4-5-20251101", "claude-opus-4-5-20251101"),
-            ModelPreset("claude-haiku-4-5-20251001", "claude-haiku-4-5-20251001"),
-            ModelPreset("claude-sonnet-4-5-20250929", "claude-sonnet-4-5-20250929"),
-            ModelPreset("claude-opus-4-1-20250805", "claude-opus-4-1-20250805"),
-            ModelPreset("claude-opus-4-20250514", "claude-opus-4-20250514"),
-            ModelPreset("claude-sonnet-4-20250514", "claude-sonnet-4-20250514"),
+            // Latest generation (2025+)
+            ModelPreset("claude-opus-4-7-20250219", "claude opus 4.7"),
+            ModelPreset("claude-sonnet-4-20250514", "claude sonnet (latest)"),
+            ModelPreset("claude-haiku-4-6", "claude haiku"),
+
+            // Recent releases (2024-2025)
+            ModelPreset("claude-opus-4-6", "claude opus 4.6"),
+            ModelPreset("claude-sonnet-4-6", "claude sonnet 4.6"),
+            ModelPreset("claude-opus-4-5-20251101", "claude opus 4.5"),
+            ModelPreset("claude-sonnet-4-5-20250929", "claude sonnet 4.5"),
+            ModelPreset("claude-haiku-4-5-20251001", "claude haiku 4.5"),
+
+            // Previous releases
+            ModelPreset("claude-opus-4-1-20250805", "claude opus 4.1"),
+            ModelPreset("claude-opus-4-20250514", "claude opus 4"),
         )
 
         fun modelPresets(): List<ModelPreset> = PRESET_MODELS

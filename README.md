@@ -16,6 +16,8 @@
   - `AUTO` — tries local Claude CLI first, falls back to the Anthropic API
   - `LOCAL` — runs any local command (e.g. `claude -p "{prompt}"`)
   - `API` — calls the Anthropic API directly with your key
+- **Latest Claude Models** — Opus 4.7, Sonnet 4.6, Haiku 4.6 + more
+- **Effort Level Control** — Choose from MINIMAL to MAXIMUM effort (100-500 tokens, 0.0-0.7°C)
 - **Smart diff scoping** — uses staged changes, selected files, or the full working-tree diff
 - **Customizable prompt** — edit the system prompt and use `{diff}` as a placeholder
 - **Live model list** — refresh available Claude models directly from the settings panel
@@ -54,7 +56,8 @@
 | Setting | Description |
 |---|---|
 | **API Key** | Your Anthropic API key (stored securely in Password Safe) |
-| **Model** | Select a Claude model from the list |
+| **Model** | Select from latest Claude models (Opus 4.7, Sonnet 4.6, Haiku 4.6, etc.) |
+| **Effort Level** | Control computational investment: MINIMAL → MAXIMUM (100-500 tokens) |
 | **Refresh models** | Fetches the latest model list from the Anthropic API |
 | **Generation mode** | `AUTO`, `LOCAL`, or `API` |
 | **Local command** | Command template with `{prompt}` placeholder |
@@ -100,6 +103,34 @@ Constraints:
 Git Diff:
 {diff}
 ```
+
+---
+
+<h2 align="center">What's New in v0.1.7?</h2>
+
+### 🤖 Latest Claude Models
+- **Claude Opus 4.7** (2025) - Most capable model, now default
+- **Claude Sonnet 4.6** - Latest balanced model
+- **Claude Haiku 4.6** - Latest fast model
+- **Plus 6+ additional models** from 2024-2025 releases
+
+### ⚡ Effort Level Control
+Choose how much computational effort Claude invests in your messages:
+
+| Level | Tokens | Temp | Use Case |
+|-------|--------|------|----------|
+| **MINIMAL** | 100 | 0.0°C | Fastest, most deterministic |
+| **LOW** | 150 | 0.1°C | Quick & focused |
+| **MEDIUM** | 220 | 0.2°C | **Balanced (default)** |
+| **HIGH** | 350 | 0.4°C | Thorough & creative |
+| **MAXIMUM** | 500 | 0.7°C | Most detailed & nuanced |
+
+### 🎯 Key Improvements
+- Better model naming (e.g., "claude opus 4.7" instead of machine IDs)
+- Enhanced settings UI with effort level dropdown
+- Improved API error handling with model fallback
+- Live model refresh from Anthropic API
+- Temperature control for creativity based on effort level
 
 ---
 

@@ -24,11 +24,13 @@ class ClaudeCommitConfigurable : BoundConfigurable("Claude Commit") {
 
     private val state = ClaudeCommitSettingsState.instance().state
     private val modeValues = ClaudeCommitSettingsState.GenerationMode.entries.toTypedArray()
+    private val effortValues = ClaudeCommitSettingsState.EffortLevel.entries.toTypedArray()
     private var availableModels = state.availableModels()
 
     private val modelPresetField = JComboBox(availableModels.toTypedArray())
     private val refreshModelsButton = JButton(REFRESH_BUTTON_TEXT)
     private val generationModeField = JComboBox(modeValues)
+    private val effortLevelField = JComboBox(effortValues)
     private val localCommandField = JBTextField(state.localCommandTemplate)
     private val maxDiffField = JBTextField(state.maxDiffChars.toString())
     private val promptTemplateArea = JBTextArea(state.promptTemplate, 10, 80)
@@ -36,6 +38,7 @@ class ClaudeCommitConfigurable : BoundConfigurable("Claude Commit") {
 
     init {
         generationModeField.selectedItem = state.getGenerationMode()
+        effortLevelField.selectedItem = state.getEffortLevel()
         modelPresetField.selectedItem = availableModels.firstOrNull { it.id == state.modelPresetId }
             ?: availableModels.firstOrNull { it.id == state.model }
             ?: availableModels.firstOrNull()
@@ -73,6 +76,10 @@ class ClaudeCommitConfigurable : BoundConfigurable("Claude Commit") {
             cell(refreshModelsButton)
                 .comment(ClaudeCommitBundle.message("settings.refresh.comment"))
         }
+        row(ClaudeCommitBundle.message("settings.effortLevel.label")) {
+            cell(effortLevelField)
+                .comment(ClaudeCommitBundle.message("settings.effortLevel.comment"))
+        }
         row(ClaudeCommitBundle.message("settings.generationMode.label")) {
             cell(generationModeField)
                 .comment(ClaudeCommitBundle.message("settings.generationMode.comment"))
@@ -98,6 +105,7 @@ class ClaudeCommitConfigurable : BoundConfigurable("Claude Commit") {
         state.modelPresetId = selectedPreset.id
         state.model = state.getEffectiveModel().ifEmpty { ClaudeCommitSettingsState.defaultModelId() }
         state.setGenerationMode(generationModeField.selectedItem as? ClaudeCommitSettingsState.GenerationMode ?: ClaudeCommitSettingsState.GenerationMode.AUTO)
+        state.setEffortLevel(effortLevelField.selectedItem as? ClaudeCommitSettingsState.EffortLevel ?: ClaudeCommitSettingsState.EffortLevel.MEDIUM)
         state.localCommandTemplate = localCommandField.text.trim().ifEmpty { "claude -p \"{prompt}\"" }
         state.maxDiffChars = maxDiffField.text.trim().toIntOrNull()?.coerceIn(1000, 100000) ?: 12000
         state.promptTemplate = promptTemplateArea.text.trim().ifEmpty { ClaudeCommitSettingsState.DEFAULT_PROMPT_TEMPLATE }
@@ -109,6 +117,8 @@ class ClaudeCommitConfigurable : BoundConfigurable("Claude Commit") {
     override fun isModified(): Boolean {
         val selectedMode = generationModeField.selectedItem as? ClaudeCommitSettingsState.GenerationMode
             ?: ClaudeCommitSettingsState.GenerationMode.AUTO
+        val selectedEffort = effortLevelField.selectedItem as? ClaudeCommitSettingsState.EffortLevel
+            ?: ClaudeCommitSettingsState.EffortLevel.MEDIUM
         val selectedModelId = (modelPresetField.selectedItem as? ClaudeCommitSettingsState.ModelPreset)?.id.orEmpty()
         val maxDiff = maxDiffField.text.trim().toIntOrNull()?.coerceIn(1000, 100000) ?: 12000
         val promptValue = promptTemplateArea.text.trim().ifEmpty { ClaudeCommitSettingsState.DEFAULT_PROMPT_TEMPLATE }
@@ -116,6 +126,7 @@ class ClaudeCommitConfigurable : BoundConfigurable("Claude Commit") {
         val storedApiKey = ClaudeCommitSecrets.getApiKey().orEmpty()
 
         return selectedMode != state.getGenerationMode() ||
+            selectedEffort != state.getEffortLevel() ||
             selectedModelId != state.modelPresetId ||
             localCommandField.text.trim() != state.localCommandTemplate ||
             maxDiff != state.maxDiffChars ||
@@ -132,6 +143,7 @@ class ClaudeCommitConfigurable : BoundConfigurable("Claude Commit") {
             ?: availableModels.firstOrNull()
 
         generationModeField.selectedItem = state.getGenerationMode()
+        effortLevelField.selectedItem = state.getEffortLevel()
         localCommandField.text = state.localCommandTemplate
         maxDiffField.text = state.maxDiffChars.toString()
         promptTemplateArea.text = state.promptTemplate

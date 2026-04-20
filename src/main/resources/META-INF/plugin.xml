@@ -2,8 +2,26 @@
     <id>fr.tjiba.claude.commit</id>
     <name>Claude Commit Message</name>
     <vendor email="contact@tjiba.fr">Tjiba</vendor>
+    <version>0.1.8</version>
 
     <description>Generates concise, context-aware Git commit messages from your selected changes using Anthropic's Claude AI. Supports local Claude and API modes with customizable prompts.</description>
+
+    <change-notes><![CDATA[
+        <h2>🎉 Version 0.1.8 - Smart Error Handling & Better Control</h2>
+        <h3>🔥 New Features</h3>
+        <ul>
+            <li>⚡ <strong>Effort Level Control</strong> - Fine-tune AI creativity (5 levels from MINIMAL to MAXIMUM)</li>
+            <li>🤖 <strong>Latest Claude Models</strong> - Support for Claude Opus 4.7, Sonnet 4.6 & Haiku 4.6</li>
+            <li>📱 <strong>IDE Notifications</strong> - Instant alerts for token/quota issues</li>
+        </ul>
+        <h3>✨ Improvements</h3>
+        <ul>
+            <li>🛡️ Better error detection for quota exhaustion & rate limits</li>
+            <li>💬 Clearer error messages without confusing links</li>
+            <li>🎯 Improved API error handling with smart fallback</li>
+            <li>🚀 Faster model selection with better naming</li>
+        </ul>
+    ]]></change-notes>
 
     <depends>com.intellij.modules.platform</depends>
 

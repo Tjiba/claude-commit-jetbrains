@@ -39,11 +39,9 @@ class GenerateCommitMessageAction : AnAction() {
                             notify(project, NotificationType.ERROR, ClaudeCommitBundle.message("action.generate.write.error"))
                         }
                     } else {
-                        notify(
-                            project,
-                            NotificationType.ERROR,
-                            result.exceptionOrNull()?.message ?: ClaudeCommitBundle.message("action.generate.failed")
-                        )
+                        val error = result.exceptionOrNull()
+                        val errorMsg = error?.message ?: ClaudeCommitBundle.message("action.generate.failed")
+                        notify(project, NotificationType.ERROR, errorMsg)
                     }
                 }
             }
@@ -68,12 +66,30 @@ class GenerateCommitMessageAction : AnAction() {
         return document != null
     }
 
-    private fun notify(project: Project, type: NotificationType, content: String) {
-        NotificationGroupManager.getInstance()
-            .getNotificationGroup("Claude Commit Notifications")
-            .createNotification(content, type)
-            .notify(project)
-    }
+     private fun notify(project: Project, type: NotificationType, content: String) {
+          val (title, message) = when {
+              type == NotificationType.ERROR && (content.contains("No tokens available", ignoreCase = true) ||
+                                                  content.contains("insufficient quota", ignoreCase = true) ||
+                                                  content.contains("credit limit", ignoreCase = true)) -> {
+                  Pair(ClaudeCommitBundle.message("error.anthropic.insufficientQuota.title"), content)
+              }
+              type == NotificationType.ERROR && content.contains("Invalid API", ignoreCase = true) -> {
+                  Pair("Invalid API Key", content)
+              }
+              type == NotificationType.ERROR && content.contains("rate limit", ignoreCase = true) -> {
+                  Pair("API Rate Limited", content)
+              }
+              type == NotificationType.ERROR -> {
+                  Pair("Generation Failed", content)
+              }
+              else -> Pair("Claude Commit", content)
+          }
+
+          NotificationGroupManager.getInstance()
+              .getNotificationGroup("Claude Commit Notifications")
+              .createNotification(title, message, type)
+              .notify(project)
+      }
 
     private fun collectSelectedPaths(e: AnActionEvent): List<String> {
         val selected = buildList {

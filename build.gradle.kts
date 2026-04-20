@@ -6,14 +6,14 @@ plugins {
 }
 
 group = "fr.tjiba"
-version = "0.1.3"
+version = "0.1.8"
 
 repositories {
     mavenCentral()
 }
 
 intellij {
-    version.set("2024.1")
+    version.set("2024.3")
     type.set("IC")
 }
 
@@ -23,8 +23,12 @@ dependencies {
 }
 
 tasks {
+    buildSearchableOptions {
+        enabled = false
+    }
+
     patchPluginXml {
-        sinceBuild.set("241")
+        sinceBuild.set("243")
         untilBuild.set("")
     }
 
