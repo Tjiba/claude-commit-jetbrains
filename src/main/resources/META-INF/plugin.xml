@@ -40,7 +40,7 @@
                 icon="/icons/claudeCommit.svg"
                 text="action.ClaudeCommit.GenerateMessage.text"
                 description="action.ClaudeCommit.GenerateMessage.description">
-            <add-to-group group-id="VcsMenus.MergeActions" anchor="last"/>
+            <add-to-group group-id="EditorPopupMenu" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>
