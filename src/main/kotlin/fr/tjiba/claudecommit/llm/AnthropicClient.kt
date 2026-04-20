@@ -37,7 +37,17 @@ class AnthropicClient(
 
             val response = httpClient.send(request, HttpResponse.BodyHandlers.ofString())
             if (response.statusCode() !in 200..299) {
-                error("Anthropic API error ${response.statusCode()}: ${response.body().take(400)}")
+                val body = response.body()
+                val errorMsg = when {
+                    response.statusCode() == 429 -> "API Rate Limited - Please wait before retrying"
+                    response.statusCode() == 401 -> "Invalid API Key or insufficient permissions"
+                    response.statusCode() == 400 && body.contains("quota", ignoreCase = true) -> 
+                        "Insufficient quota on your Anthropic account. Please check your account and billing at console.anthropic.com"
+                    response.statusCode() == 400 && body.contains("usage", ignoreCase = true) ->
+                        "Usage limit exceeded on your Anthropic account. Please check your account settings"
+                    else -> "Anthropic API error ${response.statusCode()}: ${body.take(400)}"
+                }
+                error(errorMsg)
             }
 
             val decoded = json.decodeFromString(MessageResponse.serializer(), response.body())

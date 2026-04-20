@@ -1,10 +1,14 @@
 <idea-plugin>
     <id>fr.tjiba.claude.commit</id>
-    <name>Claude Commit Message</name>
+    <name>%plugin.name</name>
     <vendor email="contact@tjiba.fr">Tjiba</vendor>
     <version>0.1.8</version>
 
-    <description>Generates concise, context-aware Git commit messages from your selected changes using Anthropic's Claude AI. Supports local Claude and API modes with customizable prompts.</description>
+    <idea-version since-build="243.7"/>
+
+    <resource-bundle>claudeCommitBundle</resource-bundle>
+
+    <description>Generates Git commit messages with Claude from your selected changes. Supports local Claude and API modes with customizable prompts and effort level control.</description>
 
     <change-notes><![CDATA[
         <h2>🎉 Version 0.1.8 - Smart Error Handling & Better Control</h2>
@@ -23,15 +27,13 @@
         </ul>
     ]]></change-notes>
 
-    <resourceBundle>claudeCommitBundle</resourceBundle>
-
     <depends>com.intellij.modules.platform</depends>
     <depends>com.intellij.modules.vcs</depends>
 
     <extensions defaultExtensionNs="com.intellij">
         <applicationConfigurable
                 id="claude.commit.settings"
-                displayName="Claude Commit"
+                displayName="%settings.display.name"
                 parentId="tools"
                 instance="fr.tjiba.claudecommit.settings.ClaudeCommitConfigurable"/>
         <notificationGroup id="claude.commit.notifications" displayType="BALLOON" isLogByDefault="true"/>
@@ -41,10 +43,9 @@
         <action id="ClaudeCommit.GenerateMessage"
                 class="fr.tjiba.claudecommit.actions.GenerateCommitMessageAction"
                 icon="/icons/claudeCommit.svg"
-                text="action.ClaudeCommit.GenerateMessage.text"
-                description="action.ClaudeCommit.GenerateMessage.description">
-            <add-to-group group-id="VcsMenus.MergeActions" anchor="last"/>
-            <add-to-group group-id="Vcs.MessageActionGroup" anchor="last"/>
+                text="%action.ClaudeCommit.GenerateMessage.text"
+                description="%action.ClaudeCommit.GenerateMessage.description">
+            <add-to-group group-id="ChangesView.CommitToolbar" anchor="last"/>
         </action>
     </actions>
 </idea-plugin>
