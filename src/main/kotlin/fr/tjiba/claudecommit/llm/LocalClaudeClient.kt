@@ -6,13 +6,20 @@ import fr.tjiba.claudecommit.i18n.ClaudeCommitBundle
 import java.time.Duration
 
 class LocalClaudeClient {
-    fun generateCommitMessage(template: String, prompt: String): Result<String> {
+    fun generateCommitMessage(template: String, prompt: String, model: String = ""): Result<String> {
         return runCatching {
-            val commandLine = buildCommandLine(template, prompt)
-            val output = CapturingProcessHandler(commandLine).runProcess(Duration.ofSeconds(45).toMillis().toInt())
+            val commandLine = buildCommandLine(template, prompt, model)
+            val handler = CapturingProcessHandler(commandLine)
+            @Suppress("UNNECESSARY_SAFE_CALL")
+            handler.processInput?.close()
+            val output = handler.runProcess(Duration.ofSeconds(45).toMillis().toInt())
 
             if (output.exitCode != 0) {
-                error(output.stderr.takeIf { it.isNotBlank() } ?: ClaudeCommitBundle.message("error.local.execFailed"))
+                val detail = listOfNotNull(
+                    output.stderr.takeIf { it.isNotBlank() },
+                    output.stdout.takeIf { it.isNotBlank() }
+                ).firstOrNull()
+                error(detail ?: ClaudeCommitBundle.message("error.local.execFailed"))
             }
 
             val message = output.stdout.trim()
@@ -21,7 +28,7 @@ class LocalClaudeClient {
         }
     }
 
-    internal fun buildCommandLine(template: String, prompt: String): GeneralCommandLine {
+    internal fun buildCommandLine(template: String, prompt: String, model: String = ""): GeneralCommandLine {
         val tokens = tokenizeTemplate(template)
         require(tokens.isNotEmpty()) { ClaudeCommitBundle.message("error.localCommand.empty") }
         require(tokens.any { it.contains(PROMPT_PLACEHOLDER) }) {
@@ -30,7 +37,10 @@ class LocalClaudeClient {
 
         val commandLine = GeneralCommandLine(tokens.first())
         tokens.drop(1).forEach { token ->
-            commandLine.addParameter(token.replace(PROMPT_PLACEHOLDER, prompt))
+            commandLine.addParameter(
+                token.replace(PROMPT_PLACEHOLDER, prompt)
+                     .replace(MODEL_PLACEHOLDER, model)
+            )
         }
         return commandLine
     }
@@ -81,6 +91,7 @@ class LocalClaudeClient {
 
     private companion object {
         const val PROMPT_PLACEHOLDER = "{prompt}"
+        const val MODEL_PLACEHOLDER = "{model}"
     }
 }
 

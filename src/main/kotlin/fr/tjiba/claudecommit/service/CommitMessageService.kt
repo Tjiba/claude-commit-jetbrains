@@ -21,17 +21,17 @@ class CommitMessageService(private val project: Project) {
             val prompt = PromptBuilder.build(settings.promptTemplate, diff)
 
             when (settings.getGenerationMode()) {
-                GenerationMode.LOCAL -> generateByLocal(prompt, settings.localCommandTemplate).getOrElse { throw it }
+                GenerationMode.LOCAL -> generateByLocal(prompt, settings.localCommandTemplate, settings.getEffectiveModel()).getOrElse { throw it }
                 GenerationMode.API -> generateByApi(prompt).getOrElse { throw it }
                 GenerationMode.AUTO -> {
                     val localFirst = isClaudePluginLikelyInstalled()
                     if (localFirst) {
-                        generateByLocal(prompt, settings.localCommandTemplate).getOrElse {
+                        generateByLocal(prompt, settings.localCommandTemplate, settings.getEffectiveModel()).getOrElse {
                             generateByApi(prompt).getOrElse { apiError -> throw apiError }
                         }
                     } else {
                         generateByApi(prompt).getOrElse {
-                            generateByLocal(prompt, settings.localCommandTemplate).getOrElse { localError -> throw localError }
+                            generateByLocal(prompt, settings.localCommandTemplate, settings.getEffectiveModel()).getOrElse { localError -> throw localError }
                         }
                     }
                 }
@@ -39,11 +39,11 @@ class CommitMessageService(private val project: Project) {
         }
     }
 
-    private fun generateByLocal(prompt: String, commandTemplate: String): Result<String> {
+    private fun generateByLocal(prompt: String, commandTemplate: String, model: String): Result<String> {
         if (commandTemplate.isBlank()) {
             return Result.failure(IllegalStateException(ClaudeCommitBundle.message("error.localCommand.empty")))
         }
-        return LocalClaudeClient().generateCommitMessage(commandTemplate, prompt)
+        return LocalClaudeClient().generateCommitMessage(commandTemplate, prompt, model)
     }
 
     private fun generateByApi(prompt: String): Result<String> {

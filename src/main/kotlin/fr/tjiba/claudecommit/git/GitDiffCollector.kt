@@ -28,7 +28,7 @@ object GitDiffCollector {
                 }
             }
 
-            error(ClaudeCommitBundle.message("error.git.diffEmpty"))
+            error(ClaudeCommitBundle.message("error.git.noFilesSelected"))
         }
     }
 

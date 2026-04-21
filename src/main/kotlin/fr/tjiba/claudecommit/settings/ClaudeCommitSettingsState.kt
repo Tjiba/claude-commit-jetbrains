@@ -31,8 +31,8 @@ class ClaudeCommitSettingsState : PersistentStateComponent<ClaudeCommitSettingsS
     }
 
     data class State(
-        var model: String = "claude-opus-4-7-20250219",
-        var modelPresetId: String = "claude-opus-4-7-20250219",
+        var model: String = "claude-haiku-4-5-20251001",
+        var modelPresetId: String = "claude-haiku-4-5-20251001",
         var cachedModelIds: MutableList<String> = mutableListOf(),
         var lastModelsSyncEpochMs: Long = 0,
         var generationMode: String = GenerationMode.AUTO.name,
@@ -123,7 +123,7 @@ Git Diff:
 
         fun modelPresets(): List<ModelPreset> = PRESET_MODELS
 
-        fun defaultModelId(): String = PRESET_MODELS.first().id
+        fun defaultModelId(): String = "claude-haiku-4-5-20251001"
 
         fun instance(): ClaudeCommitSettingsState = ApplicationManager.getApplication().getService(ClaudeCommitSettingsState::class.java)
     }
